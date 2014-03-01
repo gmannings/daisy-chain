@@ -40,6 +40,13 @@ describe('daisy-chain', function () {
             expect(test.isNumber({})).toBe(false);
         });
 
+        it('should provide a method for finding the type of data', function () {
+            expect(test.findDataType).toBeDefined();
+            expect(test.findDataType('A string')).toBe('String');
+            expect(test.findDataType(123456)).toBe('Number');
+            expect(test.findDataType([1,2,3,4,5,6])).toBe('Array');
+        });
+
     });
 
 
