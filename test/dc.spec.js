@@ -49,6 +49,17 @@ describe('daisy-chain', function () {
 
     });
 
+    describe('adding new methods', function () {
+
+        it('should have an extend method', function () {
+            expect(dc('some data').extend).toBeDefined();
+        });
+
+        it('should add new methods to the returned dc object', inject(function () {
+
+        }));
+
+    });
 
 
 });

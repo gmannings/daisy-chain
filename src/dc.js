@@ -56,6 +56,10 @@ var dc = (function(dc) {
 
     };
 
+    DaisyChain.prototype.extend = function(method, name) {
+        DaisyChain.prototype[name] = method;
+    };
+
     dc = function(data) {
         return new DaisyChain(data);
     };
