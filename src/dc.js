@@ -10,6 +10,14 @@ var dc = (function(dc) {
         /* Public methods */
 
         /**
+         * Test whether the supplied item is an object
+         * @param item
+         */
+        this.isObject = function(item) {
+            return Object.prototype.toString.call( item ) === '[object Object]';
+        };
+
+        /**
          * Test whether the supplied item is an array
          * @param item
          */
@@ -50,13 +58,65 @@ var dc = (function(dc) {
             }
         };
 
+        /**
+         * Retrieve the value of the manipulated data (whatever the format)
+         * or the original data if it has not been amended
+         */
+        this.result = function() {
+            return (this.useManipulatedData) ?
+                        this.manipulatedData :
+                        this.data;
+        };
+
         /* Constructor */
-        this.data = data;
-        this.dataType = this.findDataType(data);
+
+        // Set the data values
+        this.data       = data;
+        this.dataType   = this.findDataType(data);
+
+        // Use manipulated data after the initial processing
+        this.manipulatedData        = null;
+        this.useManipulatedData     = false;
 
     };
 
-    DaisyChain.prototype.extend = function(method, name) {
+    /**
+     * Sum the values inside of an array or object
+     */
+    DaisyChain.prototype.sum = function() {
+
+        var
+            data    = (this.useManipulatedData) ? this.manipulatedData : this.data,
+            newData = 0;
+
+        // Sum depending on Object type
+        switch (this.findDataType(data)) {
+            case 'Array':
+                this.data.map(function(val) {
+                    newData += val;
+                });
+                break;
+            case 'Object':
+                for (var o in this.data) {
+                    newData += (this.isNumber(this.data[o])) ? this.data[o] : 0;
+                }
+                break;
+            case 'String':
+                break;
+            case 'Number':
+                break;
+        }
+
+        if (newData) {
+            this.useManipulatedData = true;
+            this.manipulatedData    = newData;
+        }
+
+        // Return this for chaining
+        return this;
+    };
+
+    DaisyChain.prototype.addFn = function(name, method) {
         DaisyChain.prototype[name] = method;
     };
 

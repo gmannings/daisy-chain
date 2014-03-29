@@ -52,14 +52,33 @@ describe('daisy-chain', function () {
     describe('adding new methods', function () {
 
         it('should have an extend method', function () {
-            expect(dc('some data').extend).toBeDefined();
+            expect(dc().addFn).toBeDefined();
         });
 
-        it('should add new methods to the returned dc object', inject(function () {
-
-        }));
+        it('should add new methods to the returned dc object', function () {
+            dc().addFn('test', function() {return true});
+            expect(dc().test).toBeDefined();
+            expect(dc().test()).toBe(true);
+        });
 
     });
 
+    describe('the "sum" method', function () {
+
+        it('should sum the values within an array if they are numbers', function () {
+            var myNums = dc([1,2,3]);
+            expect(myNums.sum().result()).toBe(6);
+        });
+
+        it('should sum items in object literal format', function () {
+            var myObj = dc({
+                item: 1,
+                anotherItem: 2,
+                aString: "Hello" // This will be ignored
+            });
+
+            expect(myObj.sum().result()).toBe(3);
+        });
+    });
 
 });
